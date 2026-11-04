@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>David & Violet — 永恆的奇蹟與誓約</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Cinzel Decorative, Cormorant Garamond & Noto Serif TC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Noto+Serif+TC:wght@300;400;600;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sakura: '#F2E8FA',          /* 淡紫羅蘭粉光 */
+            sakuraDark: '#A855F7',      /* 庫洛魔幻紫 (Amethyst Purple) */
+            muchaGold: '#D4AF37',       /* 慕夏經典復古純金 (Imperial Gold) */
+            muchaGoldDark: '#997322',   /* 暗金色 */
+            muchaRuby: '#4A1D6D',       /* 深邃紫羅蘭紫 (Violet Royal) */
+            muchaSage: '#2D5A43',       /* 慕夏翡翠墨綠 (Emerald Botanical Green) */
+            muchaSageLight: '#E8F3ED',  /* 鼠尾草粉綠 */
+            parchment: '#FAF8F3',       /* 珍珠羊皮紙底色 */
+            cardBorder: '#D4AF37',
+            deepCharcoal: '#1E1B24'
+          },
+          fontFamily: {
+            serif: ['"Noto Serif TC"', 'serif'],
+            mucha: ['"Cinzel Decorative"', 'serif'],
+            display: ['"Cormorant Garamond"', 'serif'],
+            script: ['"Pinyon Script"', 'cursive']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* 慕夏壁畫色調與柔光背景：由墨綠、薰衣草紫與流金自然暈染 */
+    body {
+      background: radial-gradient(circle at 50% 20%, #FAF5FF 0%, #EEF6F0 50%, #E2ECE5 100%);
+      font-family: 'Noto Serif TC', serif;
+      color: #1E1B24;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* 庫洛牌與慕夏複合卡片裝飾 */
+    .mucha-card {
+      background: radial-gradient(circle at 50% 40%, #FFFDF9 0%, #F8F5EE 75%, #EFF5F0 100%);
+      box-shadow: 0 20px 60px -15px rgba(45, 90, 67, 0.28), 0 0 0 1px rgba(212, 175, 55, 0.45);
+      border-radius: 28px;
+    }
+
+    /* 庫洛魔法使之星與太陽月亮旋轉動態 */
+    @keyframes magicSpinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes magicSpinReverse {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+    @keyframes starPulse {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.6)); }
+      50% { transform: scale(1.06); filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.95)); }
+    }
+
+    .spin-slow {
+      animation: magicSpinSlow 36s linear infinite;
+    }
+    .spin-reverse {
+      animation: magicSpinReverse 28s linear infinite;
+    }
+    .magic-pulse {
+      animation: starPulse 3.5s ease-in-out infinite;
+    }
+
+    /* 庫洛牌外圍經典飾紋邊界：流金雙框襯托翡翠與紫羅蘭 */
+    .clow-card-frame {
+      border: 2px solid #D4AF37;
+      outline: 4px double #4A1D6D;
+      outline-offset: -7px;
+    }
+
+    /* 慕夏拱門光環 */
+    .mucha-arch {
+      border-top-left-radius: 180px;
+      border-top-right-radius: 180px;
+    }
+
+    /* 奇蹟星塵與花瓣飄落動畫：紫羅蘭、金粉與翡翠綠 */
+    .sakura-petal {
+      position: fixed;
+      pointer-events: none;
+      z-index: 40;
+      background: linear-gradient(135deg, #E9D5FF, #86EFAC);
+      border-radius: 12px 1px 12px 1px;
+      opacity: 0.75;
+      animation: petalFall linear infinite;
+    }
+    @keyframes petalFall {
+      0% {
+        transform: translateY(-10vh) translateX(0) rotate(0deg);
+        opacity: 0.95;
+      }
+      100% {
+        transform: translateY(105vh) translateX(120px) rotate(720deg);
+        opacity: 0.1;
+      }
+    }
+
+    /* 浮現過渡 */
+    .fade-in-magic {
+      animation: magicAppear 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes magicAppear {
+      from {
+        opacity: 0;
+        transform: scale(0.92) translateY(20px);
+        filter: blur(8px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+      }
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-start p-3 sm:p-6 lg:p-8 selection:bg-muchaRuby selection:text-amber-200 relative">
+
+  <!-- 櫻花花瓣背景飄落容器 -->
+  <div id="sakuraContainer"></div>
+
+
+
+  <!-- =============================== -->
+  <!-- 互動開信封面：庫洛魔法使封印卡牌狀態 -->
+  <!-- =============================== -->
+  <div id="envelopeScreen" class="w-full max-w-xl transition-all duration-700 ease-out flex flex-col items-center my-auto py-4 z-20">
+    
+    <div class="text-center mb-4">
+      <p class="font-mucha tracking-[0.25em] text-xs text-muchaGoldDark uppercase flex items-center justify-center gap-2">
+        <span class="text-muchaGold">✦</span> Le Sceau De L'amour <span class="text-muchaGold">✦</span>
+      </p>
+      <h2 class="text-xl sm:text-2xl font-serif text-muchaSage font-semibold mt-1 tracking-wider">
+        封印著幸福誓約的庫洛之牌
+      </h2>
+      <p class="text-[11px] text-stone-600 font-serif mt-1">隱藏著奇蹟力量的愛之證，請展現你真實的姿態</p>
+    </div>
+
+    <!-- 庫洛牌形狀外殼 -->
+    <div class="relative w-full aspect-[1/1.55] sm:aspect-[1/1.45] max-w-[420px] bg-[#FAF8F2] rounded-3xl shadow-2xl p-6 flex flex-col justify-between items-center clow-card-frame overflow-hidden">
+      
+      <!-- 慕夏風蔓藤與花環背景裝飾 (SVG) -->
+      <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-25" viewBox="0 0 400 600" preserveAspectRatio="none">
+        <circle cx="200" cy="300" r="170" fill="none" stroke="#D4AF37" stroke-width="1.8" stroke-dasharray="6,4"/>
+        <circle cx="200" cy="300" r="140" fill="none" stroke="#2D5A43" stroke-width="1"/>
+        <!-- 四角慕夏流線裝飾：翡翠與紫羅蘭線條 -->
+        <path d="M 15 50 Q 50 15 90 20 Q 30 70 15 130" fill="none" stroke="#2D5A43" stroke-width="2"/>
+        <path d="M 385 50 Q 350 15 310 20 Q 370 70 385 130" fill="none" stroke="#4A1D6D" stroke-width="2"/>
+        <path d="M 15 550 Q 50 585 90 580 Q 30 530 15 470" fill="none" stroke="#4A1D6D" stroke-width="2"/>
+        <path d="M 385 550 Q 350 585 310 580 Q 370 530 385 470" fill="none" stroke="#2D5A43" stroke-width="2"/>
+      </svg>
+
+      <!-- 卡牌上方抬頭 -->
+      <div class="text-center pt-3 z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/80 border border-muchaGold/50 mb-1 shadow-sm">
+          <span class="w-1.5 h-1.5 rounded-full bg-muchaSage"></span>
+          <span class="font-display tracking-[0.2em] text-[10px] text-muchaGoldDark uppercase font-semibold">The Vow Card</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-sakuraDark"></span>
+        </div>
+        <h3 class="font-mucha text-lg sm:text-xl text-muchaRuby tracking-widest mt-1">DAVID & VIOLET</h3>
+        <p class="font-display italic text-xs text-stone-500">2026.11.14 ｜ Wedding Invitation</p>
+      </div>
+
+      <!-- 核心互動按鈕：庫洛魔法使魔法陣印章 (星之魔法陣 + 日月光芒：綠、紫、金融合) -->
+      <div class="z-20 flex flex-col items-center my-auto">
+        <button id="openSealBtn" onclick="openInvitation()" aria-label="解除封印開啟喜帖" 
+                class="magic-pulse group relative w-36 h-36 sm:w-40 sm:h-40 rounded-full flex items-center justify-center cursor-pointer focus:outline-none transition-transform active:scale-95">
+          
+          <!-- 外圍旋轉星芒與十二宮刻度 (SVG) -->
+          <svg class="absolute inset-0 w-full h-full spin-slow pointer-events-none" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="92" fill="none" stroke="#D4AF37" stroke-width="2" stroke-dasharray="3, 3"/>
+            <circle cx="100" cy="100" r="85" fill="none" stroke="#2D5A43" stroke-width="1.2"/>
+            <!-- 象徵太陽與月亮的圓周符記 -->
+            <path d="M 100 8 L 104 22 L 96 22 Z M 100 192 L 104 178 L 96 178 Z M 8 100 L 22 104 L 22 96 Z M 192 100 L 178 104 L 178 96 Z" fill="#D4AF37"/>
+            <circle cx="100" cy="18" r="4" fill="#4A1D6D"/>
+            <circle cx="100" cy="182" r="4" fill="#4A1D6D"/>
+            <circle cx="18" cy="100" r="4" fill="#2D5A43"/>
+            <circle cx="182" cy="100" r="4" fill="#2D5A43"/>
+          </svg>
+
+          <!-- 內層逆轉魔法陣邊框 -->
+          <svg class="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] spin-reverse pointer-events-none opacity-85" viewBox="0 0 180 180">
+            <!-- 八芒星魔法線 -->
+            <polygon points="90,10 110,65 170,90 110,115 90,170 70,115 10,90 70,65" fill="none" stroke="#D4AF37" stroke-width="1.4"/>
+            <polygon points="33,33 90,55 147,33 125,90 147,147 90,125 33,147 55,90" fill="none" stroke="#A855F7" stroke-width="1"/>
+          </svg>
+
+          <!-- 核心封蠟：神秘深紫羅蘭與翡翠流金光輝 -->
+          <div class="relative w-20 h-20 sm:w-22 sm:h-22 rounded-full bg-gradient-to-br from-[#2D5A43] via-[#4A1D6D] to-[#1E0F2E] shadow-[0_8px_25px_rgba(74,29,109,0.55)] flex flex-col items-center justify-center border-2 border-amber-200 group-hover:scale-105 transition-transform duration-300">
+            <!-- 羽翼與五芒星 -->
+            <svg class="w-8 h-8 text-amber-300 fill-amber-300" viewBox="0 0 24 24">
+              <!-- 星之魔法杖五芒星標誌 -->
+              <path d="M12 2l2.6 6.8H21l-5.4 4.5 2 7-5.6-4.2-5.6 4.2 2-7-5.4-4.5h6.4z"/>
+            </svg>
+            <span class="text-[9px] font-mucha font-bold text-amber-200 tracking-widest mt-0.5">RELEASE</span>
+          </div>
+        </button>
+
+        <div class="flex items-center gap-1.5 mt-3 text-muchaRuby font-serif text-xs font-semibold tracking-wider">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-muchaGold animate-pulse"></i>
+          <span>點擊魔法陣・解除封印</span>
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-sakuraDark animate-pulse"></i>
+        </div>
+      </div>
+
+      <!-- 卡牌底部銘牌 -->
+      <div class="w-full text-center pb-2 z-10 border-t border-muchaGold/40 pt-3">
+        <p class="font-script text-2xl text-muchaSage">Special Miracle</p>
+        <p class="text-[11px] tracking-widest text-stone-600 font-serif">絕對沒問題的，因為幸福已悄然降臨</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================== -->
+  <!-- 正式喜帖內容：慕夏 x 庫洛牌 殿堂卡片 -->
+  <!-- =============================== -->
+  <main id="invitationContent" class="hidden w-full max-w-xl mucha-card p-4 sm:p-8 relative mb-12 z-20">
+    
+    <!-- 慕夏流線雙金邊飾邊 -->
+    <div class="clow-card-frame rounded-2xl p-4 sm:p-6 bg-parchment/70 relative backdrop-blur-sm">
+
+      <!-- 頂部：慕夏風格拱門裝飾區（日輪、花卉流線與天使羽翼） -->
+      <div class="text-center relative pt-2 pb-6">
+        
+        <!-- 慕夏代表性太陽放射圓環背景 (SVG) -->
+        <div class="w-36 h-36 mx-auto relative flex items-center justify-center">
+          <svg class="absolute inset-0 w-full h-full text-muchaGold/50 animate-spin" style="animation-duration: 90s;" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2, 2"/>
+            <circle cx="50" cy="50" r="44" fill="none" stroke="#2D5A43" stroke-width="0.8"/>
+            <!-- 慕夏花瓣光芒 -->
+            <path d="M50 2 A48 48 0 0 1 50 98 A48 48 0 0 1 50 2" fill="none" stroke="#A855F7" stroke-width="0.8"/>
+            <path d="M2 50 A48 48 0 0 1 98 50 A48 48 0 0 1 2 50" fill="none" stroke="#D4AF37" stroke-width="0.8"/>
+          </svg>
+          
+          <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-[#E8F3ED] via-[#F3E8FF] to-amber-100/70 p-1 flex items-center justify-center shadow-inner border border-muchaGold/70">
+            <div class="text-center">
+              <i data-lucide="feather" class="w-5 h-5 mx-auto text-muchaSage"></i>
+              <span class="font-mucha text-[10px] tracking-widest text-muchaRuby block mt-0.5">THE VOW</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="font-display italic text-lg sm:text-xl text-muchaSage mt-3">Sincère Invitation</p>
+        
+        <!-- 新人姓名：慕夏復古字型與流暢線條 -->
+        <div class="relative py-2">
+          <h1 class="text-3xl sm:text-4xl font-mucha text-muchaRuby font-bold tracking-wider">
+            DAVID <span class="font-script text-3xl text-muchaGold mx-1">&</span> VIOLET
+          </h1>
+          <div class="flex items-center justify-center gap-3 mt-2">
+            <div class="h-[1px] w-12 bg-gradient-to-r from-transparent via-muchaGold to-transparent"></div>
+            <i data-lucide="star" class="w-3.5 h-3.5 text-muchaGold fill-muchaGold"></i>
+            <span class="text-xs font-serif text-muchaSage font-medium tracking-[0.2em]">浪漫永恆・相伴一生</span>
+            <i data-lucide="star" class="w-3.5 h-3.5 text-muchaGold fill-muchaGold"></i>
+            <div class="h-[1px] w-12 bg-gradient-to-r from-transparent via-muchaGold to-transparent"></div>
+          </div>
+        </div>
+
+        <p class="text-xs sm:text-sm text-stone-600 font-serif mt-2 max-w-sm mx-auto leading-relaxed">
+          封印著回憶的時光之輪，在此刻化作絢爛的奇蹟。<br/>誠摯邀請親愛的您，前來與我們共享這一刻的夢幻與幸福！
+        </p>
+      </div>
+
+      <!-- 倒數計時區：魔法星盤卡片設計 (翡翠綠底蘊襯紫羅蘭與燙金) -->
+      <div class="my-6 bg-gradient-to-r from-[#EAF4ED] via-[#F8F5EE] to-[#F3E8FA] p-4 rounded-2xl border border-muchaGold/60 shadow-sm relative overflow-hidden">
+        <div class="absolute -top-6 -right-6 w-20 h-20 bg-sakuraDark/15 rounded-full blur-xl pointer-events-none"></div>
+        <div class="absolute -bottom-6 -left-6 w-20 h-20 bg-muchaSage/15 rounded-full blur-xl pointer-events-none"></div>
+
+        <div class="flex items-center justify-center gap-2 mb-3 text-xs font-mucha text-muchaSage font-bold tracking-wider">
+          <i data-lucide="compass" class="w-4 h-4 text-muchaGold"></i>
+          <span>COUNTDOWN TO THE MOMENT</span>
+        </div>
+
+        <div class="grid grid-cols-4 gap-2 sm:gap-3 text-center">
+          <div class="bg-white/95 p-2 rounded-xl border border-muchaGold/40 shadow-sm">
+            <span id="countdownDays" class="block font-display text-2xl sm:text-3xl font-bold text-muchaRuby">--</span>
+            <span class="text-[9px] sm:text-[10px] text-stone-500 uppercase tracking-wider font-mucha">Days</span>
+          </div>
+          <div class="bg-white/95 p-2 rounded-xl border border-muchaGold/40 shadow-sm">
+            <span id="countdownHours" class="block font-display text-2xl sm:text-3xl font-bold text-muchaRuby">--</span>
+            <span class="text-[9px] sm:text-[10px] text-stone-500 uppercase tracking-wider font-mucha">Hours</span>
+          </div>
+          <div class="bg-white/95 p-2 rounded-xl border border-muchaGold/40 shadow-sm">
+            <span id="countdownMins" class="block font-display text-2xl sm:text-3xl font-bold text-muchaRuby">--</span>
+            <span class="text-[9px] sm:text-[10px] text-stone-500 uppercase tracking-wider font-mucha">Mins</span>
+          </div>
+          <div class="bg-white/95 p-2 rounded-xl border border-muchaGold/40 shadow-sm">
+            <span id="countdownSecs" class="block font-display text-2xl sm:text-3xl font-bold text-muchaRuby">--</span>
+            <span class="text-[9px] sm:text-[10px] text-stone-500 uppercase tracking-wider font-mucha">Secs</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 慕夏牌面相框展示區：支援「婚紗相片」與「婚禮影音」分頁切換 -->
+      <div class="relative rounded-2xl p-2.5 bg-gradient-to-b from-[#EAE6D8] via-[#FAF5EE] to-[#E3EBE5] border-2 border-muchaGold shadow-md my-6">
+        
+        <!-- 相片 / 影片 切換 Tab -->
+        <div class="flex items-center justify-between mb-2 px-1">
+          <div class="flex gap-2">
+            <button id="mediaTabPhoto" onclick="switchMediaTab('photo')" 
+                    class="px-3 py-1 rounded-full text-xs font-serif font-semibold border border-muchaGold transition-all bg-gradient-to-r from-muchaSage to-muchaRuby text-amber-200 shadow-sm flex items-center gap-1">
+              <i data-lucide="image" class="w-3.5 h-3.5"></i>
+              婚紗相片
+            </button>
+            <button id="mediaTabVideo" onclick="switchMediaTab('video')" 
+                    class="px-3 py-1 rounded-full text-xs font-serif font-semibold border border-muchaGold/50 transition-all bg-white/80 text-stone-600 hover:text-muchaRuby flex items-center gap-1">
+              <i data-lucide="film" class="w-3.5 h-3.5"></i>
+              婚禮預告影片
+            </button>
+          </div>
+          <span class="text-[10px] font-mucha text-muchaGoldDark tracking-widest hidden sm:inline-block">FOREVER STARTS HERE</span>
+        </div>
+
+        <!-- 1. 相片模式容器 (本地端連結：./photo.jpg) -->
+        <div id="photoContainer" class="relative rounded-xl overflow-hidden group aspect-[3/4] sm:aspect-[4/5] bg-stone-100 flex items-center justify-center">
+          <img id="weddingPhoto" src="./photo.jpg" 
+               alt="David & Violet 婚紗照" 
+               class="w-full h-full object-cover object-center transition duration-700 transform group-hover:scale-105"
+               onerror="this.onerror=null; this.src='https://placehold.co/800x1200/FAF7F2/4A1D6D?text=Please+place+photo.jpg+in+same+folder';">
+          
+          <!-- 慕夏柔霧遮罩 -->
+          <div class="absolute inset-0 bg-gradient-to-t from-deepCharcoal/80 via-transparent to-transparent flex items-end justify-between p-4 text-white">
+            <p class="text-xs sm:text-sm font-serif italic tracking-wide text-amber-200 flex items-center gap-1.5">
+              <i data-lucide="sparkle" class="w-3.5 h-3.5 text-muchaGold"></i>
+              「在碧海藍天下，與你攜手許下一生的承諾。」
+            </p>
+          </div>
+        </div>
+
+        <!-- 2. 影片模式容器 (RWD 9:16 響應式手機播放外框) -->
+        <div id="videoContainer" class="hidden relative w-full flex flex-col items-center justify-center py-1">
+          <!-- 專為直式影片設計的 RWD 包覆層：手機滿屏自適應，大螢幕維持 9:16 黃金比例與最大高度限制 -->
+          <div class="relative w-full max-w-[340px] sm:max-w-[360px] aspect-[9/16] max-h-[72vh] sm:max-h-[600px] rounded-2xl overflow-hidden bg-black shadow-xl border-2 border-muchaGold/70 ring-1 ring-sakuraDark/30">
+            <video id="weddingVideoPlayer" 
+                   class="w-full h-full object-contain sm:object-cover bg-black" 
+                   controls 
+                   playsinline 
+                   webkit-playsinline
+                   preload="metadata"
+                   poster="./video-cover.jpg">
+              <!-- 本地端影片路徑 -->
+              <source src="./video.mp4" type="video/mp4">
+              您的瀏覽器不支援 HTML5 影片播放。
+            </video>
+            <!-- 播放引導小提示標籤 -->
+            <div id="videoPlayHint" class="pointer-events-none absolute top-3 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-muchaGold/40 text-[10px] text-amber-200 tracking-wider flex items-center gap-1 opacity-90 transition-opacity">
+              <i data-lucide="play" class="w-3 h-3 text-muchaGold fill-muchaGold"></i>
+              <span>點擊播放預告</span>
+            </div>
+          </div>
+          <p class="text-[11px] text-stone-500 font-serif mt-2 text-center tracking-wide">
+            ✦ 手機直式預告影片・支援全螢幕觀看 ✦
+          </p>
+        </div>
+
+      </div>
+
+      <!-- 宴會重要時間與地點資訊（慕夏拱頂卡片：綠金紫配色） -->
+      <div class="space-y-4 my-6 py-4 border-y border-muchaGold/40 text-left">
+        <!-- 時間 -->
+        <div class="flex items-start gap-3.5">
+          <div class="p-2.5 bg-muchaSageLight rounded-2xl text-muchaSage border border-muchaSage/30 mt-0.5">
+            <i data-lucide="clock" class="w-5 h-5"></i>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-serif font-bold text-muchaSage text-base flex items-center gap-2">
+              婚宴日期與時間
+              <span class="text-[10px] font-mucha font-normal px-2 py-0.5 bg-muchaGold/20 rounded-full text-muchaGoldDark">Ceremony</span>
+            </h3>
+            <p class="text-stone-900 text-sm font-semibold mt-1">2026 年 11 月 14 日 (星期六)</p>
+            <p class="text-muchaRuby text-xs sm:text-sm font-medium mt-0.5">11:30 迎賓接待 ｜ 12:00 準時入席</p>
+          </div>
+        </div>
+
+        <!-- 地點 -->
+        <div class="flex items-start gap-3.5">
+          <div class="p-2.5 bg-sakura rounded-2xl text-muchaRuby border border-sakuraDark/30 mt-0.5">
+            <i data-lucide="map-pin" class="w-5 h-5"></i>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-serif font-bold text-muchaRuby text-base flex items-center gap-2">
+              宴會地點
+              <span class="text-[10px] font-mucha font-normal px-2 py-0.5 bg-muchaGold/20 rounded-full text-muchaGoldDark">Hall</span>
+            </h3>
+            <p class="text-stone-900 text-sm font-bold mt-1">雅園新潮婚宴會館【幸福廳】</p>
+            <p class="text-stone-600 text-xs sm:text-sm mt-0.5">台中市南屯區大墩南路230號</p>
+            <p class="text-stone-500 text-xs mt-0.5">洽詢電話：(04) 2475-3568 ｜ 備有賓客專屬平面與地下停車場</p>
+          </div>
+        </div>
+
+        <!-- 著裝規範 Dress Code -->
+        <div class="flex items-start gap-3.5 pt-1">
+          <div class="p-2.5 bg-sky-50 rounded-2xl text-sky-700 border border-sky-200 mt-0.5">
+            <i data-lucide="shirt" class="w-5 h-5"></i>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-serif font-bold text-stone-800 text-base flex items-center gap-2">
+              著裝建議 (Dress Code)
+              <span class="text-[10px] font-mucha font-normal px-2 py-0.5 bg-sky-100 text-sky-800 rounded-full border border-sky-300">Blue Accent</span>
+            </h3>
+            <p class="text-stone-800 text-xs sm:text-sm font-semibold mt-1 flex items-center gap-1.5">
+              <span>藍色系服裝或隨身配件</span>
+            </p>
+            <div class="flex items-center gap-1.5 mt-1.5">
+              <span class="inline-block w-3.5 h-3.5 rounded-full bg-[#1E3A8A] shadow-sm border border-white" title="深邃海軍藍"></span>
+              <span class="inline-block w-3.5 h-3.5 rounded-full bg-[#3B82F6] shadow-sm border border-white" title="皇家藍"></span>
+              <span class="inline-block w-3.5 h-3.5 rounded-full bg-[#7DD3FC] shadow-sm border border-white" title="天空淡藍"></span>
+              <span class="inline-block w-3.5 h-3.5 rounded-full bg-[#38BDF8] shadow-sm border border-white" title="冰藍色"></span>
+              <span class="text-[11px] text-stone-500 ml-1">（各種配件:領帶、絲巾、洋裝、西裝外套或胸針耳飾皆可）</span>
+            </div>
+            <p class="text-stone-500 text-xs mt-1 leading-relaxed">
+              誠摯邀請您穿著或配戴象徵我們的青鳥與純淨誓約的藍色系元素，與我們一同點亮這場璀璨的奇蹟盛會！
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 快捷操作：行事曆 & 地圖導航按鈕 (魔法手杖燙金按鈕) -->
+      <div class="grid grid-cols-2 gap-3 mb-6">
+        <a id="googleCalBtn" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=David+%26+Violet+%E5%A9%9A%E5%AE%B4&dates=20261114T040000Z/20261114T070000Z&details=%E8%AA%A0%E6%91%AF%E9%82%80%E8%AB%8B%E6%82%A8%E8%88%87%E6%88%91%E5%80%91%E5%85%B1%E5%BA%A6%E6%B5%AA%E6%BC%AB%E6%99%82%E5%85%89%EF%BC%81%E5%85%A5%E5%BA%AD%EF%BC%9A12%3A00&location=%E9%9B%85%E5%9C%92%E6%96%B0%E6%BD%AE%E5%A9%9A%E5%AE%B4%E6%9C%83%E9%A4%A8+%E5%B9%B8%E7%A6%8F%E5%BB%B3+(%E5%8F%B0%E4%B8%AD%E5%B8%82%E5%8D%97%E5%B1%AF%E5%8D%80%E5%A4%A7%E5%A2%A9%E5%8D%97%E8%B7%AF230%E8%99%9F)" 
+           target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center gap-2 py-3 px-3 bg-white/95 border border-muchaSage/50 rounded-xl text-xs sm:text-sm font-medium text-muchaSage hover:bg-muchaSageLight transition-all shadow-sm">
+          <i data-lucide="calendar-plus" class="w-4 h-4 text-muchaGold"></i>
+          加入行事曆
+        </a>
+
+        <a href="https://www.google.com/maps/search/?api=1&query=%E9%9B%85%E5%9C%92%E6%96%B0%E6%BD%AE%E5%A9%9A%E5%AE%B4%E6%9C%83%E9%A4%A8+%E5%B9%B8%E7%A6%8F%E5%BB%B3+%E5%8F%B0%E4%B8%AD%E5%B8%82%E5%8D%97%E5%B1%AF%E5%8D%80%E5%A4%A7%E5%A2%A9%E5%8D%97%E8%B7%AF230%E8%99%9F" 
+           target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center gap-2 py-3 px-3 bg-white/95 border border-muchaGold/60 rounded-xl text-xs sm:text-sm font-medium text-muchaRuby hover:bg-sakura transition-all shadow-sm">
+          <i data-lucide="compass" class="w-4 h-4 text-muchaGold"></i>
+          Google 地圖導航
+        </a>
+      </div>
+
+      <!-- 婚禮官方 LINE 官方帳號 / QR Code 專區 -->
+      <div class="my-6 p-5 rounded-2xl bg-gradient-to-b from-[#F4FAF6] via-white to-[#F9F5FF] border border-muchaGold/60 shadow-sm text-center relative overflow-hidden">
+        <div class="absolute -top-6 -right-6 w-16 h-16 bg-emerald-100/60 rounded-full blur-lg pointer-events-none"></div>
+        <div class="absolute -bottom-6 -left-6 w-16 h-16 bg-purple-100/60 rounded-full blur-lg pointer-events-none"></div>
+
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-semibold mb-2">
+          <span class="w-2 h-2 rounded-full bg-[#06C755] inline-block animate-ping"></span>
+          <span>WEDDING OFFICIAL LINE</span>
+        </div>
+
+        <h3 class="font-serif font-bold text-muchaSage text-base tracking-wide">
+          David &amp; Violet 婚禮官方 LINE
+        </h3>
+        <p class="text-xs text-stone-500 font-serif mt-1 max-w-xs mx-auto">
+          婚禮即時花絮分享、座位查詢與貼心通知，歡迎掃描或點擊加入好友！
+        </p>
+
+        <!-- QR Code 燙金飾框 -->
+        <div class="relative w-44 h-44 mx-auto my-4 p-2.5 bg-white rounded-2xl border-2 border-muchaGold shadow-md flex items-center justify-center">
+          <!-- 四角金屬點綴 -->
+          <div class="absolute top-1 left-1 w-2.5 h-2.5 border-t-2 border-l-2 border-muchaSage"></div>
+          <div class="absolute top-1 right-1 w-2.5 h-2.5 border-t-2 border-r-2 border-muchaRuby"></div>
+          <div class="absolute bottom-1 left-1 w-2.5 h-2.5 border-b-2 border-l-2 border-muchaRuby"></div>
+          <div class="absolute bottom-1 right-1 w-2.5 h-2.5 border-b-2 border-r-2 border-muchaSage"></div>
+
+          <!-- 本地端 QR Code 圖片 (./line-qr.png) -->
+          <img src="./line-qr.png" 
+               alt="婚禮官方 LINE QR Code" 
+               class="w-full h-full object-contain rounded-lg"
+               onerror="this.onerror=null; this.src='https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https%3A%2F%2Fline.me%2Fti%2Fp%2Fwedding';">
+        </div>
+
+        <!-- 手機端直接點擊跳轉 LINE 按鈕 -->
+        <div class="max-w-xs mx-auto">
+          <!-- 請將 href 替換為您的官方 LINE 好友連結 (例如 https://lin.ee/xxxxx 或 https://line.me/ti/p/xxxx) -->
+          <a href="https://line.me" target="_blank" rel="noopener noreferrer" 
+             class="w-full py-2.5 px-4 bg-[#06C755] hover:bg-[#05a847] text-white rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-md">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <path d="M24 10.3c0-4.6-4.5-8.3-10-8.3S4 5.7 4 10.3c0 4.1 3.6 7.5 8.5 8.1.3.1.8.2.9.6.1.3.1.8 0 1.2l-.4 1.7c-.1.5-.5 1.7 1.5.9 2-1 5.3-3.1 7.2-5.4 1.5-1.8 2.3-4 2.3-6.5z"/>
+            </svg>
+            點此直接開啟 LINE 加入官方帳號
+          </a>
+        </div>
+      </div>
+
+      <!-- 喜帖底部溫馨小語與致意 -->
+      <footer class="mt-8 pt-6 border-t border-muchaGold/40 text-center">
+        <p class="font-script text-3xl sm:text-4xl text-muchaSage">Always with you</p>
+        <p class="text-xs sm:text-sm text-stone-600 font-serif mt-2 tracking-wide leading-relaxed">
+          衷心期待那天與您相見，共同見證這段奇蹟般的誓約旅程
+        </p>
+        <div class="flex items-center justify-center gap-2 mt-4 text-xs font-mucha text-muchaRuby tracking-widest uppercase">
+          <span class="text-muchaGold">✦</span>
+          <span>David &amp; Violet 敬邀</span>
+          <span class="text-muchaGold">✦</span>
+        </div>
+      </footer>
+    </div>
+  </main>
+
+  <!-- =============================== -->
+  <!-- 彈出視窗：Email 寄送範本複製區 -->
+  <!-- =============================== -->
+  <div id="emailTemplateModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#FCFAF6] rounded-3xl max-w-lg w-full p-6 shadow-2xl border-2 border-muchaGold space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center pb-2 border-b border-muchaGold/30">
+        <div class="flex items-center gap-2 text-muchaSage">
+          <i data-lucide="sparkles" class="w-5 h-5 text-muchaGold"></i>
+          <h3 class="font-serif font-bold text-base text-muchaSage">庫洛魔法使 x 慕夏風 Email 寄送文案</h3>
+        </div>
+        <button onclick="toggleEmailModal()" class="text-stone-400 hover:text-stone-700 p-1 rounded-full">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-stone-600">
+        您可以將以下文案複製至信件中寄給親朋好友，賓客點擊喜帖連結即可體驗解開封印的綠金紫羅蘭浪漫互動：
+      </p>
+
+      <!-- 郵件主旨 -->
+      <div class="bg-muchaSageLight/50 p-3 rounded-xl border border-muchaGold/40">
+        <p class="text-[11px] font-bold text-muchaSage uppercase tracking-wider mb-1 font-mucha">建議信件主旨 (Subject)</p>
+        <div class="flex justify-between items-center">
+          <code id="emailSubject" class="text-xs sm:text-sm text-muchaRuby font-medium">【封印解除✨幸福邀請】David &amp; Violet 婚禮邀請函 🌿 共享我們的璀璨奇蹟</code>
+          <button onclick="copyToClipboard('emailSubject')" class="ml-2 text-xs text-muchaSage hover:underline font-semibold shrink-0">複製</button>
+        </div>
+      </div>
+
+      <!-- 郵件內文 -->
+      <div class="bg-sakura/30 p-3 rounded-xl border border-muchaGold/40 relative">
+        <div class="flex justify-between items-center mb-1">
+          <p class="text-[11px] font-bold text-muchaRuby uppercase tracking-wider font-mucha">信件內文 (Body)</p>
+          <button onclick="copyToClipboard('emailBodyText')" class="text-xs text-muchaRuby hover:underline font-semibold">複製整篇內文</button>
+        </div>
+        <pre id="emailBodyText" class="text-xs font-serif text-stone-700 whitespace-pre-wrap leading-relaxed max-h-56 overflow-y-auto bg-white/90 p-3 rounded-lg border border-muchaGold/20">親愛的朋友、長輩 您好：
+
+「隱藏著奇蹟力量的愛之證，請在我們面前展現你真實的姿態——」
+
+在翡翠般的歲月與星光交織的長河中，因為有您一路以來的溫暖相伴，
+讓我們的故事得以綻放最璀璨的紫羅蘭花期。
+今天，我們懷著滿心期盼，想與您分享這份宛如魔法般降臨的幸福！
+
+我們即將攜手踏入人生的下一段旅程，誠摯邀請您蒞臨現場，
+一同參與這場充滿愛與浪漫的婚禮盛會。
+
+🌿【婚宴時間與地點】
+・日期：2026 年 11 月 14 日 (星期六)
+・時間：11:30 迎賓接待 ｜ 12:00 準時開席
+・地點：雅園新潮婚宴會館【幸福廳】
+・地址：台中市南屯區大墩南路230號 (備有賓客專屬停車場)
+・電話：(04) 2475-3568
+
+💙【著裝建議 Dress Code】
+・藍色系衣服或配件（洋裝、襯衫、領帶、圍巾、耳飾、胸針等皆可）
+誠摯邀請大家點綴一抹純淨的星空藍，與我們一同編織浪漫回憶！
+
+✨【專屬互動魔法喜帖】
+[請在此貼上您的電子喜帖網頁連結]
+（點開網頁即可點擊魔法陣解除封印、欣賞婚紗相片、一鍵加入行事曆與導航）
+
+「絕對沒問題的！」因為有您的祝福，這一天將無比美好。
+期待在花開的美好時節，與您相見！
+
+David ＆ Violet 敬邀
+2026. Autumn</pre>
+      </div>
+
+      <div class="flex justify-end">
+        <button onclick="toggleEmailModal()" class="px-5 py-2 bg-gradient-to-r from-muchaSage to-muchaRuby text-amber-200 text-xs font-medium rounded-xl hover:brightness-110 transition shadow-sm font-serif border border-muchaGold/40">
+          關閉視窗
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 提示訊息浮層 (Toast) -->
+  <div id="toastMessage" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-muchaRuby text-amber-200 text-xs px-5 py-2.5 rounded-full shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 z-50 border border-muchaGold">
+    已複製到剪貼簿！
+  </div>
+
+  <script>
+    // 初始化 Lucide 圖標
+    lucide.createIcons();
+
+    // 背景生成飄落的奇蹟花瓣（翡翠綠、淡紫、金粉）
+    function createSakuraPetals() {
+      const container = document.getElementById('sakuraContainer');
+      const petalCount = 18;
+      for (let i = 0; i < petalCount; i++) {
+        const petal = document.createElement('div');
+        petal.className = 'sakura-petal';
+        const size = Math.random() * 8 + 8;
+        petal.style.width = `${size}px`;
+        petal.style.height = `${size * 1.3}px`;
+        petal.style.left = `${Math.random() * 100}vw`;
+        petal.style.animationDuration = `${Math.random() * 6 + 7}s`;
+        petal.style.animationDelay = `${Math.random() * 5}s`;
+        container.appendChild(petal);
+      }
+    }
+    createSakuraPetals();
+
+    // 相簿與影片分頁切換
+    function switchMediaTab(tab) {
+      const photoBox = document.getElementById('photoContainer');
+      const videoBox = document.getElementById('videoContainer');
+      const tabPhotoBtn = document.getElementById('mediaTabPhoto');
+      const tabVideoBtn = document.getElementById('mediaTabVideo');
+      const videoEl = document.getElementById('weddingVideoPlayer');
+      const videoHint = document.getElementById('videoPlayHint');
+
+      if (tab === 'photo') {
+        photoBox.classList.remove('hidden');
+        videoBox.classList.add('hidden');
+        if (videoEl) videoEl.pause(); // 切換時自動暫停影片
+
+        tabPhotoBtn.className = "px-3 py-1 rounded-full text-xs font-serif font-semibold border border-muchaGold transition-all bg-gradient-to-r from-muchaSage to-muchaRuby text-amber-200 shadow-sm flex items-center gap-1";
+        tabVideoBtn.className = "px-3 py-1 rounded-full text-xs font-serif font-semibold border border-muchaGold/50 transition-all bg-white/80 text-stone-600 hover:text-muchaRuby flex items-center gap-1";
+      } else {
+        photoBox.classList.add('hidden');
+        videoBox.classList.remove('hidden');
+
+        tabVideoBtn.className = "px-3 py-1 rounded-full text-xs font-serif font-semibold border border-muchaGold transition-all bg-gradient-to-r from-muchaSage to-muchaRuby text-amber-200 shadow-sm flex items-center gap-1";
+        tabPhotoBtn.className = "px-3 py-1 rounded-full text-xs font-serif font-semibold border border-muchaGold/50 transition-all bg-white/80 text-stone-600 hover:text-muchaRuby flex items-center gap-1";
+
+        if (videoEl) {
+          videoEl.onplay = () => {
+            if (videoHint) videoHint.style.opacity = '0';
+          };
+          videoEl.onpause = () => {
+            if (videoHint) videoHint.style.opacity = '0.9';
+          };
+        }
+      }
+      lucide.createIcons();
+    }
+
+    // 點擊星之魔法陣「解除封印」開啟喜帖（碎花粒子改為綠、紫、金）
+    function openInvitation() {
+      confetti({
+        particleCount: 90,
+        spread: 80,
+        origin: { y: 0.55 },
+        colors: ['#D4AF37', '#A855F7', '#2D5A43', '#E9D5FF', '#86EFAC']
+      });
+
+      // 第二波流星碎芒散落
+      setTimeout(() => {
+        confetti({
+          particleCount: 50,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: ['#D4AF37', '#A855F7', '#E9D5FF']
+        });
+        confetti({
+          particleCount: 50,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: ['#D4AF37', '#2D5A43', '#86EFAC']
+        });
+      }, 250);
+
+      const envelope = document.getElementById('envelopeScreen');
+      const content = document.getElementById('invitationContent');
+      
+      envelope.style.opacity = '0';
+      envelope.style.transform = 'scale(0.9) rotate(-1deg)';
+      
+      setTimeout(() => {
+        envelope.classList.add('hidden');
+        content.classList.remove('hidden');
+        content.classList.add('fade-in-magic');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 550);
+    }
+
+    // 婚宴倒數計時器 (Target: 2026/11/14 12:00:00)
+    const weddingDate = new Date('2026-11-14T12:00:00+08:00').getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = weddingDate - now;
+
+      if (distance < 0) {
+        document.getElementById('countdownDays').innerText = "0";
+        document.getElementById('countdownHours').innerText = "0";
+        document.getElementById('countdownMins').innerText = "0";
+        document.getElementById('countdownSecs').innerText = "0";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById('countdownDays').innerText = days;
+      document.getElementById('countdownHours').innerText = hours;
+      document.getElementById('countdownMins').innerText = minutes;
+      document.getElementById('countdownSecs').innerText = seconds;
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // 切換 Email 範本視窗
+    function toggleEmailModal() {
+      const modal = document.getElementById('emailTemplateModal');
+      modal.classList.toggle('hidden');
+    }
+
+    // 複製文字至剪貼簿
+    function copyToClipboard(elementId) {
+      const el = document.getElementById(elementId);
+      const text = el.innerText || el.textContent;
+      
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "absolute";
+      textarea.style.left = "-9999px";
+      document.body.appendChild(textarea);
+      textarea.select();
+      
+      try {
+        document.execCommand("copy");
+        showToast("已成功複製到剪貼簿！");
+      } catch (err) {
+        showToast("複製失敗，請手動選取複製");
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastMessage');
+      toast.innerText = msg;
+      toast.style.opacity = '1';
+      setTimeout(() => {
+        toast.style.opacity = '0';
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
